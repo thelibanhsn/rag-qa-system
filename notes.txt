@@ -1,0 +1,66 @@
+RAG DOCUMENT Q&A SYSTEM — LEARNING NOTES
+========================================
+
+PROJECT GOAL
+------------
+Build a Retrieval-Augmented Generation (RAG) system that answers questions based only on a PDF document.
+
+---
+
+WHAT I BUILT
+------------
+- PDF loader
+- Text chunking system
+- Embedding generation using SentenceTransformers
+- Vector storage using ChromaDB
+- Semantic search using cosine similarity
+- LLM-based answer generation (Groq API)
+
+---
+
+KEY CONCEPTS LEARNED
+
+1. Chunking
+   Splitting large text into smaller overlapping pieces for better retrieval.
+
+2. Embeddings
+   Converting text into numerical vectors representing semantic meaning.
+
+3. Vector Databases
+   Using ChromaDB to store and search embeddings efficiently.
+
+4. RAG Architecture
+   Combining retrieval + generation for grounded AI responses.
+
+5. Prompt Engineering
+   Designing prompts that force the model to use only retrieved context.
+
+---
+
+CHALLENGES
+
+- Understanding vector similarity search
+- Preventing hallucinations from LLM
+- Designing good chunking strategy
+- Handling API responses correctly
+- Structuring a production-like architecture
+
+---
+
+IMPROVEMENTS MADE
+
+- Separated indexing and query pipeline
+- Added similarity threshold filtering
+- Improved prompt structure
+- Persistent vector database usage
+
+---
+
+FINAL RESULT
+------------
+A working RAG system that:
+- Reads PDFs
+- Stores knowledge in vector DB
+- Retrieves relevant context
+- Generates accurate grounded answers
+- Avoids hallucinations when info is missing

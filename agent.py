@@ -1,41 +1,30 @@
-from util import *
-import chromadb
+import os
+from dotenv import load_dotenv
+from rag_engine import RAGEngine
 
-# create a ChromaDB client
-client = chromadb.PersistentClient(path="./chroma_db")
-
-collection_name = "pdf_embeddings"
-
-# create or get the collection
-collection = client.get_or_create_collection(name=collection_name)
+load_dotenv()
 
 
+def main():
+    print("\nRAG System Started (type 'exit' to quit)\n")
 
-# read the file and extract text
-reader = PDFreader("./example.pdf")
-text = reader.get_text()
+    engine = RAGEngine(
+        api_key=os.getenv("GROQ_API_KEY"),
+        base_url=os.getenv("API_URL"),
+        model_name=os.getenv("GROQ_MODEL"),
+        collection_name="pdf_rag"
+    )
 
-# chunk the text into smaller pieces
-chunker = Chunker(text)
-chunks = chunker.chunk_text()
+    while True:
+        query = input("You: ")
 
-# embed the chunks of text
-embedder = TextEmbedder()
-embeddings = [embedder.embed_text(chunk) for chunk in chunks]
+        if query.lower() in ["exit", "quit"]:
+            break
 
-print(f" Text extracted from PDF: {text[:100]}...")  # Print first 100 characters of the text
-print(f" Number of chunks created: {len(chunks)}")
-print(f" Embeddings shape: {len(embeddings)} chunks with embedding size {len(embeddings[0]) if embeddings else 0}")
+        answer = engine.answer(query)
 
-collection.add(
-    ids=[f"chunk_{i}" for i in range(len(chunks))],
-    documents=chunks,
-    embeddings=embeddings
-)
+        print("\nAgent:", answer, "\n")
 
 
-data = collection.get()
-print(f"Retrieved {len(data['ids'])} items from the collection.")
-print(f"First item ID: {data['ids'][0]}")
-print(f"First item document: {data['documents'][0][:100]}...")  # Print first 100 characters of the first document
-
+if __name__ == "__main__":
+    main()
